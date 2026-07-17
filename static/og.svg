@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0A0B0D"/>
+  <rect x="60" y="60" width="1080" height="510" fill="#111318" stroke="#1E222A" stroke-width="2"/>
+  <rect x="60" y="60" width="4" height="510" fill="#3DDC84"/>
+  <text x="120" y="150" font-family="'Courier New',monospace" font-size="26" fill="#9AA0A6" letter-spacing="3">$ initializing subhan.dev</text>
+  <text x="120" y="290" font-family="Arial,Helvetica,sans-serif" font-size="72" font-weight="bold" fill="#E8EAED">Muhammad Subhan Rauf</text>
+  <text x="120" y="370" font-family="Arial,Helvetica,sans-serif" font-size="40" fill="#9AA0A6">I build LLM systems that survive production.</text>
+  <circle cx="132" cy="480" r="8" fill="#3DDC84"/>
+  <text x="160" y="490" font-family="'Courier New',monospace" font-size="26" fill="#3DDC84" letter-spacing="4">OPEN TO WORK</text>
+  <text x="120" y="545" font-family="'Courier New',monospace" font-size="24" fill="#9AA0A6" letter-spacing="2">github.com/Mrup1 · AI/ML ENGINEER</text>
+</svg>

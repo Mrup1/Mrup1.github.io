@@ -1,0 +1,111 @@
+{
+  "site": {
+    "title": "Muhammad Subhan Rauf — AI/ML Engineer",
+    "description": "AI/ML engineer building production LLM systems — an agentic WhatsApp receptionist, QLoRA fine-tuning on a single GPU, RAG pipelines, and EEG decoding. Open to AI Engineer roles.",
+    "canonical_url": "https://mrup1.github.io/",
+    "footer_text": "Muhammad Subhan Rauf — © 2026 · built with a build script, a github action, and a strict performance budget"
+  },
+  "profile": {
+    "name": "Muhammad Subhan Rauf",
+    "headline": "I build LLM systems that survive production.",
+    "hero_support_text": "AI/ML engineer from Pakistan. I've shipped an AI receptionist that books real medical appointments over WhatsApp, fine-tuned a 7B model on a single GPU, and decoded digits from brain signals. Currently open to AI Engineer roles.",
+    "about_text": "Computer Science graduate from FAST-NUCES. I got into AI through the backend door — not demos, but the unglamorous parts that make LLM systems trustworthy: idempotent webhooks, guardrails, traces, fallbacks, tests. The engineer I'm trying to become builds things that are boringly reliable.\n\nCurrently: open to AI/ML Engineer roles, on-site or remote.",
+    "skills_block": "languages     python · c++ · c · sql\nllm/ml        rag · fine-tuning (lora/qlora) · embeddings · prompt engineering\nframeworks    langchain · langgraph · langsmith/langfuse · fastapi · streamlit\n              transformers · pytorch · scikit-learn · pandas · numpy\ninfra         redis · docker · git · rest apis · nemo guardrails\napis          openai · anthropic · google · hugging face",
+    "email": "subhan.rouf91@gmail.com",
+    "open_to_work": true,
+    "profile_image": null,
+    "resume": null
+  },
+  "projects": [
+    {
+      "id": "clinic-ai",
+      "title": "Clinic AI: WhatsApp Healthcare Receptionist",
+      "meta_tags": "AGENTIC · LANGGRAPH · PRODUCTION",
+      "badge": { "text": "PRIVATE REPO", "color": "amber" },
+      "one_liner": "An AI receptionist that answers patients on WhatsApp and books appointments directly into a clinic's real calendar.",
+      "case_study": "Private clinics lose front-desk hours to phone calls. Clinic AI answers patient queries and books appointments end-to-end over WhatsApp, writing into the Cliniko practice-management system.\n\n**How it works:** A LangGraph supervisor classifies each incoming message and routes it to specialized sub-agents (booking, FAQ, escalation) through conditional edges, with per-conversation state checkpointed per WhatsApp number. Incoming webhooks are made idempotent with atomic Redis operations, because WhatsApp gateways redeliver — and a duplicate here means a double-booked patient. NeMo Guardrails screen every input and output before the model or the patient sees it. Every turn is traced in Langfuse: spans for tool calls, token counts, and cost per conversation.\n\n**The decision I'd defend in an interview:** when Redis is unreachable, the system fails open — a rare duplicate booking is recoverable; a receptionist that goes silent for every patient is an outage.",
+      "stack_line": "LangGraph · FastAPI · Redis · NeMo Guardrails · Langfuse · Cliniko API · WhatsApp (WAHA) · Docker",
+      "repo_url": null,
+      "live_url": null,
+      "sort_order": 1,
+      "published": true
+    },
+    {
+      "id": "qlora-mistral-7b",
+      "title": "QLoRA Fine-Tune of Mistral-7B",
+      "meta_tags": "FINE-TUNING · PEFT · 4-BIT NF4",
+      "badge": null,
+      "one_liner": "Fine-tuned a 7B-parameter model on a custom entry-test dataset — on a single free-tier GPU.",
+      "case_study": "Full fine-tuning of a 7B model needs ~60GB of VRAM. I had a fraction of that.\n\n**How it works:** The frozen base is stored in 4-bit NF4 with double quantization and dequantized on the fly for compute; rank-16 LoRA adapters (α=32) attach to all seven attention and MLP projection layers, so under 1% of parameters actually train. Batch size 1 with 8-step gradient accumulation simulates a real batch; a paged 8-bit AdamW optimizer absorbs memory spikes. Trained with SFTTrainer on Mistral's [INST] format, model selection by validation loss.",
+      "stack_line": "Transformers · PEFT · bitsandbytes · TRL · PyTorch",
+      "repo_url": "https://github.com/Mrup1/FineTunedModel",
+      "live_url": null,
+      "sort_order": 2,
+      "published": true
+    },
+    {
+      "id": "eeg-bci",
+      "title": "EEG Brain-Computer Interface",
+      "meta_tags": "SIGNAL PROCESSING · 1D-CNN · REAL-TIME",
+      "badge": null,
+      "one_liner": "Classifying which digit you're looking at — from brain signals.",
+      "case_study": "My final-year project: an SSVEP-based BCI. Each digit flickers at a distinct frequency; the visual cortex entrains to the one you attend to, encoding your choice in the EEG's frequency signature.\n\n**How it works:** 3-second EEG windows at 250Hz are Z-score normalized (scaler persisted so inference matches training exactly) and fed to a lightweight 1D-CNN — two Conv1D blocks learning temporal filters, dropout-regularized, softmax over 10 digits. The network is deliberately small so a forward pass meets a real-time latency budget, driving a live web dashboard.",
+      "stack_line": "TensorFlow/Keras · NumPy · scikit-learn · signal processing",
+      "repo_url": "https://github.com/Mrup1/final-year-project-",
+      "live_url": null,
+      "sort_order": 3,
+      "published": true
+    },
+    {
+      "id": "youtube-rag",
+      "title": "YouTube Video Q&A (RAG)",
+      "meta_tags": "RAG · FAISS · MMR RETRIEVAL",
+      "badge": null,
+      "one_liner": "Chat with any YouTube video — answers grounded strictly in its transcript.",
+      "case_study": "**How it works:** The transcript is split by a recursive character splitter (1000 chars, 200 overlap) so semantic units survive chunking, embedded with MiniLM into a FAISS index, and retrieved with MMR — maximal marginal relevance — so the top-3 chunks are relevant *and* diverse instead of near-duplicates. Mistral-7B answers at temperature 0.1 under a prompt that forces 'I don't know' when the context is insufficient. Built twice: once manually, once as an LCEL pipeline with parallel context/question branches — same behavior, composable graph.",
+      "stack_line": "LangChain · FAISS · sentence-transformers · Streamlit · Hugging Face",
+      "repo_url": "https://github.com/Mrup1/langchain-portfolio",
+      "live_url": null,
+      "sort_order": 4,
+      "published": true
+    },
+    {
+      "id": "f1-prediction",
+      "title": "F1 Race Outcome Prediction",
+      "meta_tags": "CLASSICAL ML · GRADIENT BOOSTING",
+      "badge": null,
+      "one_liner": "Predicting race finishing order from telemetry — and learning where small-data ML breaks.",
+      "case_study": "An academic pipeline project: sector times and qualifying pace pulled via FastF1, gradient-boosted trees predicting race time per driver, drivers ranked by prediction, evaluated with MAE on a held-out split. The honest lesson it taught me: with 14 rows, evaluation is fragile and leakage hides easily — which is exactly why I now treat validation design as seriously as model choice.",
+      "stack_line": "scikit-learn · FastF1 · Pandas · NumPy",
+      "repo_url": "https://github.com/Mrup1/Formula-1-Race-Outcome-Prediction-using-Machine-Learning",
+      "live_url": null,
+      "sort_order": 5,
+      "published": true
+    }
+  ],
+  "links": [
+    { "id": "nav-work", "label": "work", "url": "#work", "location": "nav", "sort_order": 1, "published": true },
+    { "id": "nav-experience", "label": "experience", "url": "#experience", "location": "nav", "sort_order": 2, "published": true },
+    { "id": "nav-about", "label": "about", "url": "#about", "location": "nav", "sort_order": 3, "published": true },
+    { "id": "nav-resume", "label": "resume", "url": "media/resume.pdf", "location": "nav", "sort_order": 4, "published": true },
+    { "id": "nav-github", "label": "github", "url": "https://github.com/Mrup1", "location": "nav", "sort_order": 5, "published": true },
+    { "id": "hero-github", "label": "github.com/Mrup1", "url": "https://github.com/Mrup1", "location": "hero", "sort_order": 1, "published": true },
+    { "id": "hero-linkedin", "label": "linkedin.com/in/subhanrauf", "url": "https://www.linkedin.com/in/subhan-rauf-4a208024a/", "location": "hero", "sort_order": 2, "published": true },
+    { "id": "hero-email", "label": "subhan.rouf91@gmail.com", "url": "mailto:subhan.rouf91@gmail.com", "location": "hero", "sort_order": 3, "published": true },
+    { "id": "footer-github", "label": "github.com/Mrup1", "url": "https://github.com/Mrup1", "location": "footer", "sort_order": 1, "published": true },
+    { "id": "footer-linkedin", "label": "linkedin.com/in/subhanrauf", "url": "https://www.linkedin.com/in/subhan-rauf-4a208024a/", "location": "footer", "sort_order": 2, "published": true },
+    { "id": "footer-email", "label": "subhan.rouf91@gmail.com", "url": "mailto:subhan.rouf91@gmail.com", "location": "footer", "sort_order": 3, "published": true }
+  ],
+  "experience": [
+    {
+      "id": "nusys-intern",
+      "role": "AI Backend Developer Intern",
+      "organization": "NUSyS Research Lab, FAST-NUCES",
+      "org_url": "https://pwr.nu.edu.pk/nusys/",
+      "sub_label": "BACKEND · TEAM MANAGER",
+      "description": "Built the backend for an AI-driven therapeutic system: FastAPI services integrating OpenAI, Anthropic, Google, and Hugging Face models behind one unified layer with routing and fallback — so a provider outage degrades gracefully instead of taking the product down. Implemented the RAG framework, orchestrated workflows with LangChain/LangGraph, and monitored token usage, cost, and latency in LangSmith. As Team Manager, coordinated the intern cohort's delegation, progress, and supervisor communication.",
+      "sort_order": 1,
+      "published": true
+    }
+  ]
+}

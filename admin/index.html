@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>admin — subhan.dev</title>
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" type="image/svg+xml" href="../static/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<!-- ── auth screen ─────────────────────────────────────────── -->
+<div id="auth" class="auth" hidden>
+  <div class="auth-box">
+    <p class="label">// ADMIN — SUBHAN.DEV</p>
+    <h1>Paste your GitHub token to edit the site.</h1>
+    <p class="hint">
+      Fine-grained personal access token, scoped to <code>Mrup1/Mrup1.github.io</code> only,
+      with <strong>Contents: Read and write</strong>. Create one at
+      github.com → Settings → Developer settings → Fine-grained tokens.
+    </p>
+    <form id="auth-form">
+      <label class="label" for="token">personal access token</label>
+      <input id="token" name="token" type="password" autocomplete="off" spellcheck="false"
+             placeholder="github_pat_…" required>
+      <button type="submit" class="btn btn-primary" id="auth-submit">unlock admin</button>
+    </form>
+    <p class="error" id="auth-error" role="alert" hidden></p>
+    <p class="footnote">
+      The token is stored in this browser's localStorage only — never committed, never sent
+      anywhere except api.github.com. This page is public HTML but inert without a token.
+    </p>
+  </div>
+</div>
+
+<!-- ── app shell ───────────────────────────────────────────── -->
+<div id="app" class="app" hidden>
+  <aside class="rail">
+    <p class="label rail-mark">// ADMIN</p>
+    <nav aria-label="Admin sections">
+      <button class="rail-link" data-view="dashboard">dashboard</button>
+      <button class="rail-link" data-view="projects">projects</button>
+      <button class="rail-link" data-view="profile">profile</button>
+      <button class="rail-link" data-view="links">links</button>
+      <button class="rail-link" data-view="experience">experience</button>
+    </nav>
+    <div class="rail-foot">
+      <a class="rail-ext" id="live-link" href="/" target="_blank" rel="noopener">view live site ↗</a>
+      <a class="rail-ext" id="actions-link" href="#" target="_blank" rel="noopener">actions runs ↗</a>
+      <button class="rail-link danger" id="forget">forget this device</button>
+    </div>
+  </aside>
+
+  <main class="panel">
+    <div id="banner" class="banner" hidden></div>
+    <div id="view" aria-live="polite"></div>
+    <div class="publishbar" id="publishbar" hidden>
+      <span id="dirty-note" class="label">unpublished changes</span>
+      <button class="btn btn-ghost" id="discard">discard</button>
+      <button class="btn btn-primary" id="publish">save &amp; publish</button>
+    </div>
+  </main>
+</div>
+
+<div id="loading" class="auth"><p class="label">// loading…</p></div>
+
+<script src="admin.js"></script>
+</body>
+</html>

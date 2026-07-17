@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ site.title }}</title>
+  <meta name="description" content="{{ site.description }}">
+  <link rel="canonical" href="{{ site.canonical_url }}">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#0A0B0D">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ site.canonical_url }}">
+  <meta property="og:title" content="{{ site.title }}">
+  <meta property="og:description" content="{{ site.description }}">
+  <meta property="og:image" content="{{ site.canonical_url }}static/og.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ site.title }}">
+  <meta name="twitter:description" content="{{ site.description }}">
+  <meta name="twitter:image" content="{{ site.canonical_url }}static/og.svg">
+
+  <link rel="icon" type="image/svg+xml" href="static/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/styles.css?v={{ css_v }}">
+  <script>document.documentElement.classList.add('js');</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Person","name":{{ profile.name | tojson }},"jobTitle":"AI/ML Engineer","email":{{ ("mailto:" ~ profile.email) | tojson }},"url":{{ site.canonical_url | tojson }},"sameAs":["https://github.com/Mrup1","https://www.linkedin.com/in/subhan-rauf-4a208024a/"]}
+  </script>
+</head>
+<body>
+<a class="skip" href="#work">skip to content</a>
+
+<header class="top">
+  {% set words = profile.name.split() %}
+  <a class="mark" href="{{ site.canonical_url }}" aria-label="{{ profile.name }} — home">{{ words[-2][0] ~ words[-1][0] if words|length > 1 else profile.name[:2] }}</a>
+  <nav aria-label="Primary">
+    {% for l in links.nav %}
+    <a href="{{ l.url }}"{% if l.url.startswith('http') %} target="_blank" rel="noopener"{% endif %}>{{ l.label }}</a>
+    {% endfor %}
+  </nav>
+</header>
+
+<main id="main">
+  <section class="hero" aria-label="Introduction">
+    <pre class="boot" id="boot" aria-hidden="true">{% for line in boot_lines %}<span class="boot-line">{{ line }}</span>
+{% endfor %}<span class="cursor" aria-hidden="true">▮</span></pre>
+    <div class="hero-main" id="hero-main">
+      <h1>{{ profile.name }}</h1>
+      <p class="headline">{{ profile.headline }}</p>
+      <p class="hero-support">{{ profile.hero_support_text }}</p>
+      {% if profile.open_to_work %}
+      <p class="status"><span class="dot" aria-hidden="true"></span>open to work</p>
+      {% endif %}
+      <ul class="contact-row" aria-label="Contact links">
+        {% for l in links.hero %}
+        <li>
+          <a class="mlink" href="{{ l.url }}"{% if l.url.startswith('http') %} target="_blank" rel="noopener"{% endif %}>{{ l.label }}</a>
+          {% if l.url.startswith('mailto:') %}
+          <button class="copy" type="button" data-copy="{{ l.url | replace('mailto:', '') }}" aria-label="Copy email address">copy</button>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+
+  <section id="work" aria-labelledby="work-label">
+    <h2 class="rule" id="work-label"><span>// 01 — WORK</span></h2>
+    <div class="spans">
+      {% for p in projects %}
+      <article class="card" id="p-{{ p.id }}">
+        <div class="card-head">
+          <p class="card-meta">PROJECT {{ '%02d' | format(loop.index) }} · {{ p.meta_tags }}{% if p.badge %} <span class="badge badge-{{ p.badge.color }}">{{ p.badge.text }}</span>{% endif %}</p>
+          <h3 class="card-title">
+            <button type="button" aria-expanded="false" aria-controls="body-{{ p.id }}">{{ p.title }}</button>
+          </h3>
+          <p class="one-liner">{{ p.one_liner }}</p>
+          <span class="card-toggle" aria-hidden="true"></span>
+        </div>
+        <div class="card-body" id="body-{{ p.id }}">
+          <div class="card-body-inner">
+            <div class="prose">{{ p.case_study_html }}</div>
+            <p class="stack"><span class="stack-key">stack</span>{{ p.stack_line }}</p>
+            <p class="card-links">
+              {% if p.repo_url %}<a class="mlink" href="{{ p.repo_url }}" target="_blank" rel="noopener">view repo →</a>{% endif %}
+              {% if p.live_url %}<a class="mlink" href="{{ p.live_url }}" target="_blank" rel="noopener">live →</a>{% endif %}
+              {% if not p.repo_url and not p.live_url %}<em class="private-note">Code is private (client work) — happy to walk through the architecture live.</em>{% endif %}
+            </p>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section id="experience" aria-labelledby="xp-label">
+    <h2 class="rule" id="xp-label"><span>// 02 — EXPERIENCE</span></h2>
+    {% for e in experience %}
+    <article class="xp">
+      <p class="card-meta">{{ e.sub_label }}</p>
+      <h3>{{ e.role }}</h3>
+      <p class="xp-org"><a class="mlink" href="{{ e.org_url }}" target="_blank" rel="noopener">{{ e.organization }}</a></p>
+      <div class="prose">{{ e.description_html }}</div>
+    </article>
+    {% endfor %}
+  </section>
+
+  <section id="about" aria-labelledby="about-label">
+    <h2 class="rule" id="about-label"><span>// 03 — ABOUT</span></h2>
+    <div class="about-grid">
+      <figure class="portrait">
+        {% set words = profile.name.split() %}
+        {% if profile.profile_image %}
+        <img src="{{ profile.profile_image }}" alt="Portrait of {{ profile.name }}" width="160" height="160" loading="lazy">
+        {% else %}
+        <div class="monogram" role="img" aria-label="Monogram of {{ profile.name }}">{{ words[-2][0] ~ words[-1][0] if words|length > 1 else profile.name[:2] }}</div>
+        {% endif %}
+        <figcaption>{{ words[-2] | lower ~ '.' ~ words[-1] | lower if words|length > 1 else profile.name | lower }} — ai/ml engineer</figcaption>
+      </figure>
+      <div class="about-text">
+        <div class="prose">{{ about_html }}</div>
+        <pre class="skills" aria-label="Skills">{{ profile.skills_block }}</pre>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <h2 class="rule"><span>// 04 — CONTACT</span></h2>
+  <ul class="contact-row" aria-label="Contact links">
+    {% for l in links.footer %}
+    <li>
+      <a class="mlink" href="{{ l.url }}"{% if l.url.startswith('http') %} target="_blank" rel="noopener"{% endif %}>{{ l.label }}</a>
+      {% if l.url.startswith('mailto:') %}
+      <button class="copy" type="button" data-copy="{{ l.url | replace('mailto:', '') }}" aria-label="Copy email address">copy</button>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  <p class="colophon">{{ site.footer_text }}</p>
+</footer>
+
+<script src="static/script.js?v={{ js_v }}" defer></script>
+</body>
+</html>
