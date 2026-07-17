@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>404 — span not found</title>
+  <meta name="robots" content="noindex">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#0A0B0D">
+  <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css?v={{ css_v }}">
+</head>
+<body class="page-404">
+  <main class="notfound">
+    <p class="label-404">// 404 — SPAN NOT FOUND</p>
+    <h1>This trace doesn't exist.</h1>
+    <p class="notfound-body">
+      The page you asked for isn't here — it may have been renamed, or it may never
+      have existed. Nothing is broken on your end.
+    </p>
+    <p class="notfound-links">
+      <a class="mlink" href="/">← back to {{ profile.name.split()[-2] | lower ~ '.' ~ profile.name.split()[-1] | lower if profile.name.split()|length > 1 else profile.name | lower }}</a>
+      <a class="mlink" href="/#work">view the work →</a>
+    </p>
+  </main>
+</body>
+</html>

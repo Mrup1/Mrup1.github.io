@@ -1,6 +1,6 @@
 # subhan.dev — git-backed portfolio
 
-A personal portfolio that costs $0 to run and has a real admin portal.
+A personal site that costs $0 to run and has a real admin portal. It's a portfolio, not a job application: it describes what I build and how I think about it, and stands on its own whether or not I'm looking for work. (The one job-hunt signal is a small status chip you can toggle off in the admin.)
 
 - **The database is this repo.** `content.json` holds every word on the site; `media/` holds the profile picture and resume.
 - **The backend is a build script.** `build.py` renders `content.json` through Jinja2 templates into pure static HTML in `dist/` (markdown case studies are sanitized with bleach — injected HTML cannot survive the build).
@@ -37,7 +37,7 @@ The token is stored in that browser's `localStorage` only. It is never committed
 ## 3 · Using the admin
 
 - **Projects / Links / Experience** — add, edit, reorder (↑↓), publish/unpublish, delete (with confirm). New projects land at the top.
-- **Profile** — name, headline, hero text, about (markdown with live preview), skills block, email, open-to-work toggle (drives the status dot *and* the last boot-sequence line), profile picture (resized/compressed in your browser to ≤800px before committing), resume PDF (≤10 MB → `media/resume.pdf`; the nav's `resume` item only exists while a resume is uploaded).
+- **Profile** — name, headline, hero text, about (markdown with live preview), skills block, email, open-to-work toggle (shows or hides the small status chip under the hero — nothing else on the site depends on it), profile picture (resized/compressed in your browser to ≤800px before committing), resume PDF (≤10 MB → `media/resume.pdf`; the nav's `resume` item only exists while a resume is uploaded).
 - Every edit is staged locally first; **save & publish** commits media files, then `content.json`, and links you to the Action run. Live in ~1 minute.
 - **Safety:** drafts autosave to the browser so a closed tab loses nothing; leaving with unpublished changes warns you; if `content.json` changed on GitHub since you loaded it (another device, a direct edit), the publish is refused with a “reload latest & re-apply” prompt — never a silent overwrite.
 
@@ -59,3 +59,5 @@ python3 -m http.server -d dist 8000     # http://localhost:8000
 2. **The nav `resume` item is a normal link row that `build.py` suppresses** whenever `profile.resume` is null (matched by its `media/resume.pdf` URL). This keeps “links” fully data-driven in the admin while still guaranteeing no dead resume link can ever render.
 3. **Site-level meta lives in a small `site` block in `content.json`** (title, description, canonical URL, footer line) rather than being hardcoded in the template — the schema in the spec didn't place it, and the contract stays “everything on the page comes from content.json.”
 4. **Removing the profile picture unlinks it rather than deleting the file** — the monogram fallback renders immediately, and the old image stays in git history (consistent with the backup philosophy above).
+5. **Projects are deep-linkable** (`/#p-clinic-ai`). Opening a card rewrites the hash with `replaceState`, so the back button leaves the site instead of walking back through every card; arriving on a deep link skips the boot sequence, because that visitor asked for a specific project.
+6. **The boot sequence is telemetry about the work** (`spans... 5 traced`, generated from the project count), not a status line about my availability — that lives in the one chip.

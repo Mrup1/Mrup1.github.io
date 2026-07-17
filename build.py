@@ -101,13 +101,14 @@ def build():
         e["description_html"] = md(e.get("description"))
     about_html = md(profile.get("about_text"))
 
+    # Telemetry about the work, not about the job hunt. The open-to-work
+    # signal lives in one quiet chip in the hero instead.
     boot_lines = [
         "$ initializing subhan.dev",
         "▸ loading models........ ok",
         "▸ guardrails............ active",
         "▸ tracing............... enabled",
-        "▸ status................ "
-        + ("open to work" if profile.get("open_to_work") else "heads down, building"),
+        "▸ spans................. {} traced".format(len(projects)),
     ]
 
     env = Environment(
@@ -144,6 +145,9 @@ def build():
     }
     (DIST / "index.html").write_text(
         env.get_template("index.html").render(**ctx), encoding="utf-8"
+    )
+    (DIST / "404.html").write_text(
+        env.get_template("404.html").render(**ctx), encoding="utf-8"
     )
 
     canonical = content["site"]["canonical_url"].rstrip("/") + "/"

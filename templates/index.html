@@ -86,7 +86,7 @@
             <p class="card-links">
               {% if p.repo_url %}<a class="mlink" href="{{ p.repo_url }}" target="_blank" rel="noopener">view repo →</a>{% endif %}
               {% if p.live_url %}<a class="mlink" href="{{ p.live_url }}" target="_blank" rel="noopener">live →</a>{% endif %}
-              {% if not p.repo_url and not p.live_url %}<em class="private-note">Code is private (client work) — happy to walk through the architecture live.</em>{% endif %}
+              {% if not p.repo_url and not p.live_url %}<em class="private-note">Code is private (client work) — the architecture is written up above.</em>{% endif %}
             </p>
           </div>
         </div>
@@ -127,7 +127,7 @@
   </section>
 </main>
 
-<footer>
+<footer id="contact">
   <h2 class="rule"><span>// 04 — CONTACT</span></h2>
   <ul class="contact-row" aria-label="Contact links">
     {% for l in links.footer %}

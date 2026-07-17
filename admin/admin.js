@@ -402,7 +402,7 @@
       '<div class="full"><label class="label" for="pf-about">about text (markdown)</label><textarea id="pf-about" name="about_text" data-preview="about-preview">' + esc(pr.about_text) + "</textarea>" +
       '<div class="label">preview</div><div class="mono-preview" id="about-preview">' + mdPreview(pr.about_text) + "</div></div>" +
       '<div class="full"><label class="label" for="pf-skills">skills block (monospace, preformatted)</label><textarea id="pf-skills" name="skills_block" class="tall" style="font-family:var(--mono);white-space:pre">' + esc(pr.skills_block) + "</textarea></div>" +
-      '<div class="full check"><label><input type="checkbox" name="open_to_work"' + (pr.open_to_work ? " checked" : "") + "> open to work (status dot + boot line)</label></div>" +
+      '<div class="full check"><label><input type="checkbox" name="open_to_work"' + (pr.open_to_work ? " checked" : "") + "> open to work (shows the status chip under the hero)</label></div>" +
       "</div>" +
       '<div class="form-grid" style="margin-top:16px">' +
       '<div><div class="label">profile picture</div>' +

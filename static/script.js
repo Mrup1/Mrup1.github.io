@@ -1,8 +1,20 @@
-/* trace viewer — boot sequence, span expansion, copy-to-clipboard */
+/* trace viewer — boot sequence, span expansion, deep links, copy-to-clipboard */
 (function () {
   "use strict";
 
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var cards = Array.prototype.slice.call(document.querySelectorAll(".card"));
+
+  function cardFromHash() {
+    var h = location.hash;
+    if (!h || h.indexOf("#p-") !== 0) return null;
+    var el = document.getElementById(h.slice(1));
+    return el && el.classList.contains("card") ? el : null;
+  }
+
+  /* Someone arriving on a deep link asked for a specific project —
+     don't make them sit through the boot sequence first. */
+  var deepLinked = !!cardFromHash();
 
   /* ── hero boot sequence ── */
   var boot = document.getElementById("boot");
@@ -25,7 +37,7 @@
       hero.classList.add("on");
     };
 
-    if (reduce) {
+    if (reduce || deepLinked) {
       boot.classList.add("boot-static");
       finish();
     } else {
@@ -52,23 +64,54 @@
     }
   }
 
-  /* ── one trace span open at a time ── */
-  var cards = Array.prototype.slice.call(document.querySelectorAll(".card"));
+  /* ── trace spans: one open at a time, URL stays in sync ── */
+
+  function closeAll() {
+    cards.forEach(function (c) {
+      c.classList.remove("open");
+      var b = c.querySelector(".card-title button");
+      if (b) b.setAttribute("aria-expanded", "false");
+    });
+  }
+
+  function setHash(hash) {
+    if (!history.replaceState) return;
+    /* replaceState, not pushState: the back button should leave the site,
+       not walk back through every card the visitor opened. */
+    history.replaceState(null, "", hash || location.pathname + location.search);
+  }
+
+  function openCard(card, opts) {
+    closeAll();
+    card.classList.add("open");
+    var btn = card.querySelector(".card-title button");
+    if (btn) btn.setAttribute("aria-expanded", "true");
+    setHash("#" + card.id);
+    if (opts && opts.scroll) {
+      card.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    }
+  }
+
   cards.forEach(function (card) {
     var btn = card.querySelector(".card-title button");
     if (!btn) return;
     btn.addEventListener("click", function () {
-      var wasOpen = card.classList.contains("open");
-      cards.forEach(function (c) {
-        c.classList.remove("open");
-        var b = c.querySelector(".card-title button");
-        if (b) b.setAttribute("aria-expanded", "false");
-      });
-      if (!wasOpen) {
-        card.classList.add("open");
-        btn.setAttribute("aria-expanded", "true");
+      if (card.classList.contains("open")) {
+        closeAll();
+        setHash(null);
+      } else {
+        openCard(card);
       }
     });
+  });
+
+  var initial = cardFromHash();
+  if (initial) openCard(initial, { scroll: true });
+
+  window.addEventListener("hashchange", function () {
+    var target = cardFromHash();
+    if (target) openCard(target, { scroll: true });
+    else closeAll();
   });
 
   /* ── copy email ── */
