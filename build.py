@@ -150,6 +150,22 @@ def build():
         env.get_template("404.html").render(**ctx), encoding="utf-8"
     )
 
+    # /resume is the URL people actually type and share; keep it working as a
+    # shortcut to the PDF for as long as a resume exists.
+    if profile.get("resume"):
+        (DIST / "resume").mkdir()
+        (DIST / "resume" / "index.html").write_text(
+            '<!DOCTYPE html>\n<html lang="en">\n<head>\n'
+            '<meta charset="utf-8">\n'
+            '<meta name="robots" content="noindex">\n'
+            f'<meta http-equiv="refresh" content="0; url=/{profile["resume"]}">\n'
+            f'<link rel="canonical" href="/{profile["resume"]}">\n'
+            "<title>resume — redirecting</title>\n</head>\n<body>\n"
+            f'<p>Redirecting to <a href="/{profile["resume"]}">the resume</a>…</p>\n'
+            "</body>\n</html>\n",
+            encoding="utf-8",
+        )
+
     canonical = content["site"]["canonical_url"].rstrip("/") + "/"
     (DIST / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n'
